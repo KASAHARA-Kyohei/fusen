@@ -1,0 +1,291 @@
+.sidebarTitle span {
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 720;
+}
+
+.sidebarTitle small {
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0;
+}
+
+.fileList {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  overflow: auto;
+  padding: 10px;
+}
+
+.fileItem {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 34px;
+  padding: 7px 8px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: var(--file-text);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.fileItem span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fileItem:hover {
+  border-color: var(--button-border);
+  background: var(--file-hover);
+}
+
+.fileItem.is-active {
+  border-color: rgb(34 124 112 / 28%);
+  color: var(--accent-strong);
+  background: var(--file-active);
+  box-shadow: 0 5px 18px rgb(33 60 40 / 8%);
+}
+
+.fileListEmpty {
+  display: grid;
+  place-items: center;
+  min-height: 96px;
+  padding: 14px;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+.titleBlock h1 {
+  max-width: min(58vw, 640px);
+  margin: 0;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 740;
+  letter-spacing: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.titleBlock p {
+  max-width: min(60vw, 680px);
+  margin: 2px 0 0;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.iconButton {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border: 1px solid var(--button-border);
+  border-radius: 7px;
+  color: var(--file-text);
+  background: var(--button-bg);
+  cursor: pointer;
+}
+
+.iconButton:hover {
+  border-color: rgb(34 124 112 / 42%);
+  color: var(--accent-strong);
+  background: var(--file-active);
+}
+
+.themeButton[aria-expanded="true"] {
+  color: var(--accent-strong);
+  border-color: rgb(94 178 160 / 48%);
+}
+
+.themePicker {
+  position: relative;
+  display: inline-grid;
+}
+
+.themeMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 10;
+  display: grid;
+  min-width: 176px;
+  gap: 3px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--button-bg);
+  box-shadow: var(--shadow);
+}
+
+.themeMenuSectionLabel {
+  padding: 4px 8px 2px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 760;
+  text-transform: uppercase;
+}
+
+.themeMenuSeparator {
+  height: 1px;
+  margin: 4px 2px;
+  background: var(--line);
+}
+
+.themeMenuItem {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 16px;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 34px;
+  padding: 7px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--file-text);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.themeMenuItem:hover,
+.themeMenuItem.is-active {
+  border-color: var(--button-border);
+  color: var(--accent-strong);
+  background: var(--file-hover);
+}
+
+.themeSwatch {
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--button-border);
+  border-radius: 50%;
+}
+
+.modeBadge {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 16px;
+  border: 1px solid var(--button-border);
+  border-radius: 5px;
+  color: var(--muted);
+  font-family: "SFMono-Regular", "Cascadia Code", "Menlo", monospace;
+  font-size: 9px;
+  font-weight: 720;
+}
+
+.saveButton {
+  color: #ffffff;
+  border-color: var(--accent-strong);
+  background: var(--accent);
+}
+
+.saveButton:hover {
+  color: #ffffff;
+  background: var(--accent-strong);
+}
+
+.statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 26px;
+  gap: 10px;
+  padding: 7px 4px 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.appShell.is-compact .statusbar {
+  min-height: 20px;
+  padding-top: 4px;
+  opacity: 0.72;
+}
+
+.statusbar span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.statusPill {
+  flex: 0 0 auto;
+  padding: 2px 7px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+}
+
+.statusbar.is-editing .statusPill {
+  color: var(--saving);
+  background: rgb(138 109 25 / 10%);
+}
+
+.statusbar.is-saving .statusPill {
+  color: var(--accent-strong);
+  background: rgb(34 124 112 / 12%);
+}
+
+.statusbar.is-error {
+  color: var(--danger);
+}
+
+.statusbar.is-error .statusPill {
+  color: #ffffff;
+  background: var(--danger);
+}
+
+.statusbar.is-saved .statusPill,
+.statusbar.is-idle .statusPill {
+  color: var(--muted);
+  background: transparent;
+}
+
+.emptyState {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 14px;
+  min-height: 0;
+  border: 1px dashed var(--button-border);
+  border-radius: 8px;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--paper) 78%, transparent);
+}
+
+.emptyState p {
+  margin: 0;
+}
+
+.emptyState button {
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--accent-strong);
+  border-radius: 7px;
+  color: white;
+  background: var(--accent);
+  cursor: pointer;
+}
+
+@media (max-width: 680px) {
+  .titleBlock h1 {
+    max-width: 42vw;
+  }
+
+  .titleBlock p {
+    max-width: 48vw;
+  }
+}

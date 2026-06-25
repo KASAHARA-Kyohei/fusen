@@ -1,0 +1,173 @@
+.cm-editor {
+  height: 100%;
+  color: var(--ink);
+  background: var(--paper);
+  font-family:
+    "Iowan Old Style", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  font-size: 16px;
+  line-height: 1.72;
+}
+
+.cm-editor.cm-focused {
+  outline: none;
+}
+
+.cm-scroller {
+  overflow: auto;
+}
+
+.cm-content {
+  min-height: 100%;
+  padding: 34px clamp(20px, 5vw, 58px);
+  caret-color: var(--accent-strong);
+}
+
+.appShell.is-compact .cm-content {
+  padding: 22px clamp(16px, 6vw, 42px);
+}
+
+.cm-line {
+  padding: 0;
+}
+
+.cm-activeLine {
+  background: var(--active-line);
+}
+
+.cm-selectionBackground,
+.cm-focused .cm-selectionBackground {
+  background: var(--selection) !important;
+}
+
+.cm-vim-panel {
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  background: var(--paper-deep);
+  font-size: 12px;
+}
+
+.cm-vim-panel input {
+  color: var(--ink);
+}
+
+.cm-md-heading-line {
+  color: var(--accent-strong);
+  font-family:
+    "Avenir Next", "Hiragino Sans", "Yu Gothic", sans-serif;
+  font-weight: 760;
+  line-height: 1.38;
+  text-decoration: none;
+}
+
+.cm-md-heading-line * {
+  text-decoration: none !important;
+}
+
+.cm-md-heading-1 {
+  padding-top: 0.5em;
+  padding-bottom: 0.12em;
+  font-size: 1.42em;
+}
+
+.cm-md-heading-2 {
+  padding-top: 0.42em;
+  padding-bottom: 0.1em;
+  font-size: 1.28em;
+}
+
+.cm-md-heading-3 {
+  padding-top: 0.34em;
+  font-size: 1.16em;
+}
+
+.cm-md-heading-4,
+.cm-md-heading-5,
+.cm-md-heading-6 {
+  padding-top: 0.24em;
+  font-size: 1.04em;
+}
+
+.cm-md-list-line {
+  line-height: 1.76;
+}
+
+.cm-md-bullet {
+  display: inline-block;
+  width: 1ch;
+  color: var(--accent-strong);
+  font-weight: 760;
+}
+
+.cm-md-checkbox {
+  position: relative;
+  display: inline-block;
+  width: 1.04em;
+  height: 1.04em;
+  margin: 0 0.28em 0 0.02em;
+  border: 1.7px solid var(--muted);
+  border-radius: 4px;
+  background: var(--paper);
+  cursor: pointer;
+  line-height: 1;
+  vertical-align: -0.15em;
+}
+
+.cm-md-checkbox.is-checked {
+  border-color: var(--accent-strong);
+  background: var(--accent);
+}
+
+.cm-md-checkbox.is-checked::after {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  width: 0.42em;
+  height: 0.22em;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  border-bottom: 2px solid white;
+  border-left: 2px solid white;
+  content: "";
+}
+
+.cm-md-code-line {
+  padding-right: 14px;
+  padding-left: 14px;
+  color: #e9efe4;
+  background: var(--code);
+  font-family:
+    "SFMono-Regular", "Cascadia Code", "Menlo", "Consolas", monospace;
+  font-size: 0.92em;
+  line-height: 1.58;
+}
+
+.cm-md-code-start {
+  margin-top: 0.45em;
+  padding-top: 8px;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+}
+
+.cm-md-code-body {
+  background: var(--code-soft);
+}
+
+.cm-md-code-end {
+  margin-bottom: 0.45em;
+  padding-bottom: 8px;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+
+.cm-md-code-line + .cm-md-code-line {
+  border-top: 1px solid rgb(255 255 255 / 4%);
+}
+
+.cm-md-code-fence-muted {
+  color: #8c9a8b;
+}
+
+@media (max-width: 680px) {
+  .cm-content {
+    padding: 24px 18px;
+  }
+}
