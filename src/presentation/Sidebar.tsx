@@ -1,4 +1,4 @@
-import { FileText, FolderOpen, PanelLeft } from "lucide-react";
+import { FilePlus, FileText, FolderOpen, PanelLeft } from "lucide-react";
 import { type NoteFile } from "../domain/note";
 import { type RecentFile } from "../domain/recentFiles";
 
@@ -7,6 +7,7 @@ type SidebarProps = {
   recentFiles: RecentFile[];
   sidebarVisible: boolean;
   onOpenFile: () => void;
+  onCreateNewNote: () => void;
   onSelectFile: (file: RecentFile) => void;
   onToggleSidebar: () => void;
 };
@@ -16,6 +17,7 @@ export function Sidebar({
   recentFiles,
   sidebarVisible,
   onOpenFile,
+  onCreateNewNote,
   onSelectFile,
   onToggleSidebar,
 }: SidebarProps) {
@@ -29,6 +31,9 @@ export function Sidebar({
           <span>fusen</span>
           <small>{recentFiles.length} recent</small>
         </div>
+        <button className="iconButton" type="button" onClick={onCreateNewNote} title="新規メモ">
+          <FilePlus size={16} />
+        </button>
         <button className="iconButton" type="button" onClick={onOpenFile} title="開く">
           <FolderOpen size={16} />
         </button>

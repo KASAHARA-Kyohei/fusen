@@ -237,6 +237,22 @@ export function useNotesController() {
     await openRecentFile(noteFileFromPath(selected));
   }, [dirty, openRecentFile]);
 
+  const createNewNote = useCallback(async () => {
+    if (dirty) {
+      const shouldDiscard = window.confirm("未保存の変更を破棄して新規メモを作成しますか？");
+      if (!shouldDiscard) {
+        return;
+      }
+    }
+
+    clearAutosaveTimer();
+    resetToUntitledNote();
+    setSaveStatus("idle");
+    setSaveError(null);
+    setMessage("新規メモ");
+    await setSetting(SETTINGS.lastFilePath, null);
+  }, [clearAutosaveTimer, dirty, resetToUntitledNote]);
+
   const saveCurrentFile = useCallback(async () => {
     clearAutosaveTimer();
     await saveLatestContent();
@@ -325,6 +341,7 @@ export function useNotesController() {
     activeTitle,
     chooseFileToOpen,
     content,
+    createNewNote,
     handleContentChange,
     message,
     openRecentFile,

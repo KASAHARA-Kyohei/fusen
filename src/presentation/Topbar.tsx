@@ -1,4 +1,4 @@
-import { FolderOpen, PanelLeft, Save } from "lucide-react";
+import { FilePlus, FolderOpen, PanelLeft, Save } from "lucide-react";
 import { type EditorMode, type ThemeMode } from "../domain/settings";
 import { SettingsMenu } from "./SettingsMenu";
 
@@ -8,6 +8,7 @@ type TopbarProps = {
   editorMode: EditorMode;
   sidebarVisible: boolean;
   themeMode: ThemeMode;
+  onCreateNewNote: () => void;
   onOpenFile: () => void;
   onSave: () => void;
   onSelectEditorMode: (mode: EditorMode) => void;
@@ -21,6 +22,7 @@ export function Topbar({
   editorMode,
   sidebarVisible,
   themeMode,
+  onCreateNewNote,
   onOpenFile,
   onSave,
   onSelectEditorMode,
@@ -46,6 +48,9 @@ export function Topbar({
         </div>
       </div>
       <div className="topbarActions">
+        <button className="iconButton" type="button" onClick={onCreateNewNote} title="新規メモ">
+          <FilePlus size={17} />
+        </button>
         <button className="iconButton" type="button" onClick={onOpenFile} title="開く">
           <FolderOpen size={17} />
         </button>

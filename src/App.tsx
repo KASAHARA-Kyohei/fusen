@@ -25,6 +25,7 @@ function App() {
         activeFile={notes.activeFile}
         recentFiles={notes.recentFiles}
         sidebarVisible={settings.sidebarVisible}
+        onCreateNewNote={() => void notes.createNewNote()}
         onOpenFile={() => void notes.chooseFileToOpen()}
         onSelectFile={(file) => void notes.openRecentFile(file)}
         onToggleSidebar={settings.toggleSidebar}
@@ -37,6 +38,7 @@ function App() {
           editorMode={settings.editorMode}
           sidebarVisible={settings.sidebarVisible}
           themeMode={settings.themeMode}
+          onCreateNewNote={() => void notes.createNewNote()}
           onOpenFile={() => void notes.chooseFileToOpen()}
           onSave={() => void notes.saveCurrentFile()}
           onSelectEditorMode={settings.selectEditorMode}
