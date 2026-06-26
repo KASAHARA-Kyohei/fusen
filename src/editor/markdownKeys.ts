@@ -29,6 +29,9 @@ export function editorKeymap(
     Prec.highest(
       keymap.of([
         {
+          any: (view, event) => handleMarkdownEnter(view, event, options),
+        },
+        {
           key: "Mod-s",
           run: () => {
             handlers.onSave();
@@ -55,15 +58,30 @@ export function editorKeymap(
         run: (view) =>
           options.shouldHandleMarkdownShortcuts(view) && outdentSelectedLines(view),
       },
-      {
-        key: "Enter",
-        run: (view) =>
-          options.shouldHandleMarkdownShortcuts(view) && continueMarkdownList(view),
-      },
       ...historyKeymap,
       ...defaultKeymap,
     ]),
   ];
+}
+
+function handleMarkdownEnter(
+  view: EditorView,
+  event: KeyboardEvent,
+  options: KeymapOptions,
+): boolean {
+  if (event.key !== "Enter") {
+    return false;
+  }
+
+  if (event.isComposing || view.composing) {
+    return false;
+  }
+
+  if (!options.shouldHandleMarkdownShortcuts(view)) {
+    return false;
+  }
+
+  return continueMarkdownList(view);
 }
 
 function indentSelectedLines(view: EditorView): boolean {
