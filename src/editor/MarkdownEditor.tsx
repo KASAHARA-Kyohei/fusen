@@ -11,6 +11,7 @@ import {
 import { getCM, vim } from "@replit/codemirror-vim";
 import { useEffect, useRef } from "react";
 import { type EditorMode } from "../domain/settings";
+import { switchToAlphanumericInput } from "../infrastructure/inputMethodService";
 import { editorKeymap } from "./markdownKeys";
 import { markdownPreviewExtensions } from "./markdownPreview";
 
@@ -113,6 +114,45 @@ export function MarkdownEditor({
         ),
       ],
     });
+  }, [editorMode]);
+
+  useEffect(() => {
+    if (editorMode !== "vim") {
+      return;
+    }
+
+    let cleanup: (() => void) | null = null;
+    let cancelled = false;
+
+    queueMicrotask(() => {
+      if (cancelled || editorMode !== "vim") {
+        return;
+      }
+
+      const view = viewRef.current;
+      const cm = view ? getCM(view) : null;
+      if (!cm) {
+        return;
+      }
+
+      const handleModeChange = (event: { mode?: string }) => {
+        if (event.mode !== "normal") {
+          return;
+        }
+
+        void switchToAlphanumericInput().catch((error) => {
+          console.warn("Failed to switch input method to alphanumeric", error);
+        });
+      };
+
+      cm.on("vim-mode-change", handleModeChange);
+      cleanup = () => cm.off("vim-mode-change", handleModeChange);
+    });
+
+    return () => {
+      cancelled = true;
+      cleanup?.();
+    };
   }, [editorMode]);
 
   useEffect(() => {

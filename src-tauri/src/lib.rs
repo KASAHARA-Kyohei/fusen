@@ -1,5 +1,7 @@
 use std::{fs, path::Path};
 
+mod input_method;
+
 #[tauri::command]
 fn read_file(path: String) -> Result<String, String> {
     let path = validate_markdown_path(&path)?;
@@ -10,6 +12,11 @@ fn read_file(path: String) -> Result<String, String> {
 fn write_file(path: String, content: String) -> Result<(), String> {
     let path = validate_markdown_path(&path)?;
     fs::write(path, content).map_err(|error| error.to_string())
+}
+
+#[tauri::command]
+fn switch_to_alphanumeric_input() -> Result<(), String> {
+    input_method::switch_to_alphanumeric_input()
 }
 
 fn validate_markdown_path(path: &str) -> Result<&Path, String> {
@@ -31,7 +38,11 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_store::Builder::default().build())
-        .invoke_handler(tauri::generate_handler![read_file, write_file])
+        .invoke_handler(tauri::generate_handler![
+            read_file,
+            write_file,
+            switch_to_alphanumeric_input
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
