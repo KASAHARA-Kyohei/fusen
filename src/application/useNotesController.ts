@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { type NoteFile } from "../domain/note";
 import {
+  forgetRecentFile,
   normalizeRecentFiles,
   noteFileFromPath,
   type RecentFile,
@@ -30,6 +31,7 @@ export function useNotesController() {
   const saveInFlightRef = useRef(false);
   const saveAgainRef = useRef(false);
   const autosaveTimerRef = useRef<number | null>(null);
+  const recentFilesRef = useRef(recentFiles);
 
   const dirty = content !== savedContent;
 
@@ -68,6 +70,10 @@ export function useNotesController() {
     activeFileRef.current = activeFile;
   }, [activeFile]);
 
+  useEffect(() => {
+    recentFilesRef.current = recentFiles;
+  }, [recentFiles]);
+
   const clearAutosaveTimer = useCallback(() => {
     if (autosaveTimerRef.current !== null) {
       window.clearTimeout(autosaveTimerRef.current);
@@ -79,16 +85,43 @@ export function useNotesController() {
     await setSetting(SETTINGS.recentFiles, files as unknown as Record<string, unknown>[]);
   }, []);
 
+  const resetToUntitledNote = useCallback(() => {
+    setActiveFile(null);
+    activeFileRef.current = null;
+    setContent("");
+    contentRef.current = "";
+    setSavedContent("");
+    savedContentRef.current = "";
+  }, []);
+
   const rememberFile = useCallback(
     async (file: RecentFile) => {
-      setRecentFiles((current) => {
-        const next = rememberRecentFile(current, file);
-        void persistRecentFiles(next);
-        return next;
-      });
+      const next = rememberRecentFile(recentFilesRef.current, file);
+      recentFilesRef.current = next;
+      setRecentFiles(next);
+      await persistRecentFiles(next);
       await setSetting(SETTINGS.lastFilePath, file.path);
     },
     [persistRecentFiles],
+  );
+
+  const forgetFile = useCallback(
+    async (file: RecentFile) => {
+      const next = forgetRecentFile(recentFilesRef.current, file.path);
+      recentFilesRef.current = next;
+      setRecentFiles(next);
+      await persistRecentFiles(next);
+
+      if (activeFileRef.current?.path === file.path) {
+        resetToUntitledNote();
+      }
+
+      const lastFilePath = await getSetting<string>(SETTINGS.lastFilePath);
+      if (lastFilePath === file.path) {
+        await setSetting(SETTINGS.lastFilePath, null);
+      }
+    },
+    [persistRecentFiles, resetToUntitledNote],
   );
 
   const saveLatestContent = useCallback(async () => {
@@ -179,12 +212,13 @@ export function useNotesController() {
         await loadFileFromDisk(file);
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
+        await forgetFile(file);
         setSaveError(errorMessage);
         setSaveStatus("error");
-        setMessage(`${file.name} を開けませんでした`);
+        setMessage("ファイルが見つからないため一覧から削除しました");
       }
     },
-    [dirty, loadFileFromDisk],
+    [dirty, forgetFile, loadFileFromDisk],
   );
 
   const chooseFileToOpen = useCallback(async () => {
@@ -231,16 +265,29 @@ export function useNotesController() {
         }
 
         const validRecentFiles = normalizeRecentFiles(storedRecentFiles);
+        recentFilesRef.current = validRecentFiles;
         setRecentFiles(validRecentFiles);
 
         const lastFile =
           validRecentFiles.find((file) => file.path === lastFilePath) ??
           (lastFilePath ? noteFileFromPath(lastFilePath) : null);
 
-        if (lastFile) {
-          await loadFileFromDisk(lastFile);
-        } else {
+        if (!lastFile) {
           setMessage("新規メモ");
+          return;
+        }
+
+        try {
+          await loadFileFromDisk(lastFile);
+        } catch (error) {
+          console.error(error);
+          if (cancelled) {
+            return;
+          }
+          await forgetFile(lastFile);
+          setSaveStatus("idle");
+          setSaveError(null);
+          setMessage("ファイルが見つからないため一覧から削除しました");
         }
       } catch (error) {
         console.error(error);
@@ -256,7 +303,7 @@ export function useNotesController() {
     return () => {
       cancelled = true;
     };
-  }, [loadFileFromDisk]);
+  }, [forgetFile, loadFileFromDisk]);
 
   useEffect(() => {
     clearAutosaveTimer();

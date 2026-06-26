@@ -38,3 +38,7 @@ export function rememberRecentFile(files: RecentFile[], file: RecentFile): Recen
     ...files.filter((item) => item.path !== file.path),
   ].slice(0, MAX_RECENT_FILES);
 }
+
+export function forgetRecentFile(files: RecentFile[], path: string): RecentFile[] {
+  return files.filter((item) => item.path !== path);
+}
